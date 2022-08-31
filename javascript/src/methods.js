@@ -4,7 +4,7 @@ import { DEFAULT_SOURCE } from "./constants";
 
 function addControl(args) {
   const map = this;
-  const control = new mapboxgl[args.controlName](args.options);
+  const control = args.topLevel ? new window[args.topLevel][args.controlName](args.options) : new window[args.controlName](args.options);
   map.addControl(control, args.pos);
 }
 
@@ -122,6 +122,11 @@ function fitBounds(args) {
   map.fitBounds(args.bounds, args.options || { });
 }
 
+function flyTo(args) {
+  const map = this;
+  map.flyTo(args.options);
+}
+
 function setStyle(args) {
   const map = this;
   map.setStyle(args.style);
@@ -139,6 +144,13 @@ function addDrawControl(args) {
   });
 }
 
+// UpdateSource
+function setSourceTiles(args) {
+  const map = this;
+  map.getSource(args.sourceId).setTiles(args.tiles)
+
+}
+
 export default {
   addControl,
   addSource,
@@ -153,6 +165,8 @@ export default {
   setLayoutProperty,
   setData,
   fitBounds,
+  flyTo,
   setStyle,
-  addDrawControl
+  addDrawControl,
+  setSourceTiles
 };
